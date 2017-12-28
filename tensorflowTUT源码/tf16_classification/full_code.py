@@ -1,5 +1,3 @@
- 
-
 """
 Please note, this code is only for python 3+. If you are using python 2+, please modify the code accordingly.
 """
@@ -20,23 +18,29 @@ def add_layer(inputs, in_size, out_size, activation_function=None,):
     return outputs
 
 def compute_accuracy(v_xs, v_ys):
-    global prediction
+    global prediction #辨明这里我们使用的是全局变量  就是下面的prediction
+
     y_pre = sess.run(prediction, feed_dict={xs: v_xs})
+    #和sklearn一样，我们只需要将x_data数据传递进去就行了
+
+    #选取出概率最大所属的类别
     correct_prediction = tf.equal(tf.argmax(y_pre,1), tf.argmax(v_ys,1))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
     result = sess.run(accuracy, feed_dict={xs: v_xs, ys: v_ys})
     return result
 
 # define placeholder for inputs to network
-xs = tf.placeholder(tf.float32, [None, 784]) # 28x28
+#工匠精神  工匠精神  工匠精神 一根筋
+xs = tf.placeholder(tf.float32, [None, 784]) # 28x28   这里的列是784，但是行不确定 的数据格式
 ys = tf.placeholder(tf.float32, [None, 10])
 
-# add output layer
+# add output layer 做分类使用的softmax + 交叉熵  就是很不错的搭配
+#784是输入的特征  10是输出特征
 prediction = add_layer(xs, 784, 10,  activation_function=tf.nn.softmax)
 
-# the error between prediction and real data
+# the error between prediction and real data # loss
 cross_entropy = tf.reduce_mean(-tf.reduce_sum(ys * tf.log(prediction),
-                                              reduction_indices=[1]))       # loss
+                                              reduction_indices=[1]))
 train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
 
 sess = tf.Session()
@@ -47,6 +51,7 @@ for i in range(1000):
     batch_xs, batch_ys = mnist.train.next_batch(100)
     sess.run(train_step, feed_dict={xs: batch_xs, ys: batch_ys})
     if i % 50 == 0:
+        #50条数据调用一次
         print(compute_accuracy(
             mnist.test.images, mnist.test.labels))
 

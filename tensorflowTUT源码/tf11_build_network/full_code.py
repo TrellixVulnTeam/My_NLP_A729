@@ -8,18 +8,21 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def add_layer(inputs, in_size, out_size, activation_function=None):
-    Weights = tf.Variable(tf.random_normal([in_size, out_size]))
-    biases = tf.Variable(tf.zeros([1, out_size]) + 0.1)
-    Wx_plus_b = tf.matmul(inputs, Weights) + biases
+    Weights = tf.Variable(tf.random_normal([in_size, out_size])) #Variable里面是随机数是初始化的规则；
+    biases = tf.Variable(tf.zeros([1, out_size]) + 0.1)#这里面试初始化的规则
+
+    Wx_plus_b = tf.matmul(inputs, Weights) + biases   #这里的matmul和 *有什么区别
+
+
     if activation_function is None:
         outputs = Wx_plus_b
     else:
-        outputs = activation_function(Wx_plus_b)
+        outputs = activation_function(Wx_plus_b) #将激活函数加在y=ax+b上面去
     return outputs
 
 # Make up some real data
 x_data = np.linspace(-1, 1, 300)[:, np.newaxis]
-noise = np.random.normal(0, 0.05, x_data.shape)
+noise = np.random.normal(0, 0.05, x_data.shape) #（0,0.05）
 y_data = np.square(x_data) - 0.5 + noise
 
 ##plt.scatter(x_data, y_data)
@@ -33,7 +36,7 @@ l1 = add_layer(xs, 1, 10, activation_function=tf.nn.relu)
 # add output layer
 prediction = add_layer(l1, 10, 1, activation_function=None)
 
-# the error between prediciton and real data
+# the error between prediciton and real data reduction_indices=[1] 就是指定按照上面样的轴进行sum
 loss = tf.reduce_mean(tf.reduce_sum(tf.square(ys-prediction), reduction_indices=[1]))
 train_step = tf.train.GradientDescentOptimizer(0.1).minimize(loss)
 # important step

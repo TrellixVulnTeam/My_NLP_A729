@@ -1,8 +1,7 @@
- 
-
 """
 Please note, this code is only for python 3+. If you are using python 2+, please modify the code accordingly.
 """
+
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
@@ -22,8 +21,9 @@ x_data = np.linspace(-1, 1, 300)[:, np.newaxis]
 noise = np.random.normal(0, 0.05, x_data.shape)
 y_data = np.square(x_data) - 0.5 + noise
 
-##plt.scatter(x_data, y_data)
-##plt.show()
+#为什么在学习过程中直接显示图像的的运动过程
+plt.scatter(x_data, y_data)
+plt.show()
 
 # define placeholder for inputs to network
 xs = tf.placeholder(tf.float32, [None, 1])

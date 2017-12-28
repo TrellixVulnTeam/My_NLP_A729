@@ -11,8 +11,11 @@ x_data = np.random.rand(100).astype(np.float32)
 y_data = x_data*0.1 + 0.3
 
 ### create tensorflow structure start ###
-
+Weights = tf.Variables(tf.random_uniform([1], -1.0, 1.0))
+Biases = tf.Variable(tf.zeros([1]))
 ### create tensorflow structure end ###
+y=Weights
+
           # Very important
 
 for step in range(201):
